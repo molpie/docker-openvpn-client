@@ -1,14 +1,26 @@
-FROM alpine:3.17
+FROM alpine:3.23.4
+
+ENV KILL_SWITCH=on \
+    VPN_LOG_LEVEL=3 \
+    HTTP_PROXY=off \
+    SOCKS_PROXY=off
 
 RUN apk add --no-cache \
-    bash \
     bind-tools \
+    dante-server \
     iptables \
     ip6tables \
-    openvpn
+    openvpn \
+    tinyproxy
 
-COPY . /usr/local/bin
+RUN mkdir -p /data/vpn
 
-ENV KILL_SWITCH=on
+COPY data/ /data
 
-ENTRYPOINT [ "entry.sh" ]
+RUN chmod +x /data/scripts/entry.sh \
+             /data/scripts/dante_wrapper.sh \
+             /data/scripts/tinyproxy_wrapper.sh
+
+HEALTHCHECK CMD ping -c 3 1.1.1.1 || exit 1
+
+ENTRYPOINT ["/data/scripts/entry.sh"]
