@@ -125,9 +125,9 @@ if [ "$KILL_SWITCH" = "on" ]; then
     done
 
     echo "Allowing connections over VPN interface..."
-    iptables -A INPUT -i tun0 -j ACCEPT
-    iptables -A OUTPUT -o tun0 -j ACCEPT
-    iptables -A FORWARD -o tun0 -j ACCEPT
+    iptables -A INPUT -i tun+ -j ACCEPT
+    iptables -A OUTPUT -o tun+ -j ACCEPT
+    iptables -A FORWARD -o tun+ -j ACCEPT
 
     echo -e "iptables rules created and routes configured.\n"
 else

@@ -4,7 +4,7 @@
 
 echo -e "Running Dante SOCKS proxy server.\n"
 
-until ip link show tun0 2>&1 | grep -qv "does not exist"; do
+until ip link show 2>&1 | grep -qE '^[0-9]+: tun[0-9]+:'; do
     sleep 1
 done
 
